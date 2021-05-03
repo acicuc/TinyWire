@@ -121,14 +121,14 @@ bool USI_TWI_S::sleepMode(bool sleepFlag){
 void tws_delay(unsigned long ms)
 {
     uint32_t start = millis();
-    while (millis() < (start + ms)) TinyWireS.stateCheck();
+    while ((millis() - start) < ms) TinyWireS.stateCheck();
 }
 
 // version of delay loop using microseconds
 void tws_delay_micros(unsigned long us)
 {
     uint32_t start = micros();
-    while (micros() < (start + us)) TinyWireS.stateCheck();
+    while ((micros() - start) < us) TinyWireS.stateCheck();
 }
 
 // Preinstantiate Objects //////////////////////////////////////////////////////

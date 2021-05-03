@@ -48,7 +48,7 @@ The timeout is used in the following ways:
   ...do some other stuff;
   }
   ```
- 
+
  * A 25ms timeout is set by default. If you want to disable the timeout just set the second argument to 0 or false within TinyWireS.begin.
 
   ## Bus Active
@@ -74,9 +74,10 @@ The timeout is used in the following ways:
  * Waking your MCU can sometimes take a few milliseconds, so be patient and expect this in your code. For example, say we want some data from an ATtiny85. We first set the register start position and then we do a multibyte 'requestFrom'. The master side might look something like this,
 
   ```
-  unsigned long timeout_time = 100+millis(); // 100ms timeout
-  byte pos = 0;                              // registry address for data retreivel
-  byte n = 6;                                // n bytes from slave
+  unsigned long timeout = 100;    // 100ms timeout
+  unsigned long start = millis();
+  byte pos = 0;                   // registry address for data retreivel
+  byte n = 6;                     // n bytes from slave
 
   // set registry start position on the slave
   Wire.beginTransmission(I2C_addr);   // begin
@@ -84,7 +85,7 @@ The timeout is used in the following ways:
   err = Wire.endTransmission(false);  // send but suppress stop
 
   // wait for successful transmission (sensor could be asleep so we need to give some time to wakeup)
-  while (err && (millis() < timeout_time)) {
+  while (err && ((millis() - start) < timeout)) {
     err = Wire.endTransmission(false);
     delay(1);
   }
